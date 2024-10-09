@@ -1,0 +1,1 @@
+<b>СИСТЕМА: начало чата 18.08 9.10.24</b><br><hr><br>Hello, I'm NThacker<br>This a new chat<br>You can send text in <b>HTML</b> <i>symblos</i><br>And also send files and <a href="google.ru">links</a><br><a href="./files/ngrok.exe" download="">ngrok.exe</a><br>А также нативно писать кириллицей
