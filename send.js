@@ -1,4 +1,5 @@
 var responseDiv = $('#otvet');
+//otv.scrollTo(0, otv.scrollHeight);
 
 document.forms.address.onsubmit = function(e) {
 	if(e != "update"){
@@ -21,6 +22,8 @@ document.forms.address.onsubmit = function(e) {
 		}
 
 		xhr.send();
+		var otv = document.getElementById('otvet')
+		otv.scrollTo(0, otv.scrollHeight);
 	} else {
 		var xhr = new XMLHttpRequest();
 		
