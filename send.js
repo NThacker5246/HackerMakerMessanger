@@ -1,4 +1,6 @@
 var responseDiv = $('#otvet');
+var resp = document.getElementById('otvet');
+var otv = "";
 //otv.scrollTo(0, otv.scrollHeight);
 
 document.forms.address.onsubmit = function(e) {
@@ -17,7 +19,7 @@ document.forms.address.onsubmit = function(e) {
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
 				console.log(xhr.responseText)
-				$('#otvet').html(xhr.responseText);
+				responseDiv.html(xhr.responseText);
 			}
 		}
 
@@ -32,8 +34,10 @@ document.forms.address.onsubmit = function(e) {
 
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState === 4 && xhr.status === 200) {
-				console.log(xhr.responseText)
-				$('#otvet').html(xhr.responseText);
+				if(window.otv != xhr.responseText){
+					responseDiv.html(xhr.responseText);
+					window.otv = xhr.responseText;
+				}
 			}
 		}
 
@@ -44,5 +48,7 @@ document.forms.address.onsubmit = function(e) {
 function update() {
 	document.forms.address.onsubmit("update");
 }
+
+update();
 
 setInterval(update, 1000);
