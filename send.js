@@ -1,13 +1,15 @@
 var responseDiv = $('#otvet');
 var resp = document.getElementById('otvet');
+var input = document.getElementById('inpText');
 var otv = "";
-//otv.scrollTo(0, otv.scrollHeight);
+var flag = true;
 
 document.forms.address.onsubmit = function(e) {
 	if(e != "update"){
 		if (e != null) {
 			e.preventDefault();
 		}
+
 		var userInput = document.forms.address.message.value;
 		userInput = encodeURIComponent(userInput);
 
@@ -17,15 +19,15 @@ document.forms.address.onsubmit = function(e) {
 		
 
 		xhr.onreadystatechange = function() {
-			if (xhr.readyState === 4 && xhr.status === 200) {
+			if (xhr.readyState === 4 && xhr.status === 200 && window.otv != xhr.responseText) {
 				console.log(xhr.responseText)
 				responseDiv.html(xhr.responseText);
+				resp.scrollTo(0, resp.scrollHeight);
+				input.value = "";
 			}
 		}
 
 		xhr.send();
-		var otv = document.getElementById('otvet')
-		otv.scrollTo(0, otv.scrollHeight);
 	} else {
 		var xhr = new XMLHttpRequest();
 		
@@ -33,11 +35,11 @@ document.forms.address.onsubmit = function(e) {
 		
 
 		xhr.onreadystatechange = function() {
-			if (xhr.readyState === 4 && xhr.status === 200) {
-				if(window.otv != xhr.responseText){
-					responseDiv.html(xhr.responseText);
-					window.otv = xhr.responseText;
-				}
+			if (flag && xhr.readyState === 4 && xhr.status === 200 && window.otv != xhr.responseText) {
+				responseDiv.html(xhr.responseText);
+				window.otv = xhr.responseText;
+				flag = false;
+				resp.scrollTo(0, resp.scrollHeight);
 			}
 		}
 
@@ -47,6 +49,7 @@ document.forms.address.onsubmit = function(e) {
 
 function update() {
 	document.forms.address.onsubmit("update");
+	flag = true;
 }
 
 update();

@@ -1,3 +1,13 @@
+<?php
+	session_start();
+
+	//-----Checking Login-----
+	if(!isset($_SESSION['login'])){
+		//Relocating
+		header("Location: /login/");
+	}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,7 +22,7 @@
 	</div>
 
 	<form method="GET" name="address" class="input">
-		<input type="text" name="message" class="input-field">
+		<input type="text" name="message" class="input-field" id="inpText">
 		<button type="submit" class="btn btn-primary" style="width: 4%;">Send!</button>	
 	</form>
 
