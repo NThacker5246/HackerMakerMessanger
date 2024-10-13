@@ -17,19 +17,61 @@
 	<link rel="stylesheet" type="text/css" href="/style/style.css">
 </head>
 <body>
-	<div class="output">
-		<div id="otvet"></div>
+	<div class="cont">
+		<div class="col-md-3 bar"></div>
+		<div class="col-md-8 bar">
+			<div class="output">
+				<div id="otvet"></div>
+			</div>
+
+			<form method="GET" name="address" class="input">
+				<input type="text" name="message" class="input-field" id="inpText">
+				<button type="submit" class="btn btn-primary">Send!</button>	
+			</form>
+
+			<form method="POST" name="fileF">
+				<input type="file" name="file">
+				<button type="submit" id="filesent">Send!</button>	
+			</form>
+		</div>
+		<div class="col-md-1 bar profile-bar">
+			<div>
+				<img src="/img/50x50.png">
+			</div>
+			<p>
+				<?=$_SESSION['login']?>
+			</p>
+		</div>
 	</div>
 
-	<form method="GET" name="address" class="input">
-		<input type="text" name="message" class="input-field" id="inpText">
-		<button type="submit" class="btn btn-primary" style="width: 4%;">Send!</button>	
-	</form>
-
-	<form method="POST" name="fileF">
-		<input type="file" name="file">
-		<button type="submit" id="filesent">Send!</button>	
-	</form>
+	<div id="action" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Заголовок</h5>
+					<button type="button" class="close" data-dismiss="modal" id="cls2">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Что вы хотите сделать</p>
+				
+					<select name="act" id="act">
+						<option value="del">Удалить сообщение</option>
+						<option value="edi">Измеинть сообщение</option>
+					</select>
+					<br>
+					<button type="button" class="btn btn-info" id="actB">Применить</button>
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-warning"  data-dismiss="modal" id="cls3">
+						Закрыть
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<a href="./login/logout.php" class="btn btn-danger">Log Off</a>
 

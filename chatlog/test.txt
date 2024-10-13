@@ -1,1 +1,1 @@
-<b>СИСТЕМА: начало чата 18.08 9.10.24</b><br><hr><br>
+<br><div id="m2" class="font" onclick="call_act('m2');">NThacker>Hello</div><br><div id="m7" class="font" onclick="call_act('m7');">NThacker>I'm a NThacker<br><div id="m4" class="font" onclick="call_act('m4');">NThacker>And now</div><br><br><br><div id="m7" class="font" onclick="call_act('m7');">NThacker>h</div></div>

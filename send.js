@@ -14,16 +14,31 @@ document.forms.address.onsubmit = function(e) {
 		userInput = encodeURIComponent(userInput);
 
 		var xhr = new XMLHttpRequest();
-		
-		xhr.open('GET', './send.php?' + 'text=' + userInput);
-		
+		if(toId != ""){
+			xhr.open('GET', './send.php?' + 'text=' + userInput + '&num=' + toId);
+			
 
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState === 4 && xhr.status === 200 && window.otv != xhr.responseText) {
-				console.log(xhr.responseText)
-				responseDiv.html(xhr.responseText);
-				resp.scrollTo(0, resp.scrollHeight);
-				input.value = "";
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200 && window.otv != xhr.responseText) {
+					//console.log(xhr.responseText)
+					responseDiv.html(xhr.responseText);
+					resp.scrollTo(0, resp.scrollHeight);
+					input.value = "";
+				}
+			}
+
+			toId = "";
+		} else {
+			xhr.open('GET', './send.php?' + 'text=' + userInput + '&num=');
+			
+
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200 && window.otv != xhr.responseText) {
+					//console.log(xhr.responseText)
+					responseDiv.html(xhr.responseText);
+					resp.scrollTo(0, resp.scrollHeight);
+					input.value = "";
+				}
 			}
 		}
 
@@ -31,7 +46,7 @@ document.forms.address.onsubmit = function(e) {
 	} else {
 		var xhr = new XMLHttpRequest();
 		
-		xhr.open('GET', './send.php?' + 'text=');
+		xhr.open('GET', './send.php?' + 'text=&num=');
 		
 
 		xhr.onreadystatechange = function() {
@@ -54,4 +69,4 @@ function update() {
 
 update();
 
-setInterval(update, 1000);
+setInterval(update, 100000);
