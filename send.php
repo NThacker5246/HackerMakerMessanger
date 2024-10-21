@@ -3,9 +3,10 @@
 
 	$text = $_GET["text"];
 	$id = $_GET["num"];
+	$chat = $_GET["chat"];
 
 	if(!empty($text)){
-		$data = file_get_contents("./chatlog/test.txt");
+		$data = file_get_contents("./chatlog/$chat");
 		if(!empty($id)){
 
 			$newMsg = "";
@@ -48,17 +49,17 @@
 			}
 			$data .= "</div>";
 		}
-		$file = fopen("./chatlog/test.txt", "w");
+		$file = fopen("./chatlog/$chat", "w");
 		$f = fwrite($file, $data);
 		$f2 = fclose($file);
 		echo $data;
 	} else {
-		$data = file_get_contents("./chatlog/test.txt");
+		$data = file_get_contents("./chatlog/$chat");
 		if(!empty($id)){
 			$msg = explode("<br>", $data);			
 			$msg[intval($id - 1)] = '';
 			$data = implode("<br>", $msg);
-			$file = fopen("./chatlog/test.txt", "w");
+			$file = fopen("./chatlog/$chat", "w");
 			$f = fwrite($file, $data);
 			$f2 = fclose($file);
 		}

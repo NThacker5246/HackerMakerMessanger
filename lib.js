@@ -1,6 +1,9 @@
 var toId = "";
 var temp = "";
 
+var chat = "";
+var ch = "";
+
 function copy(id) {
 	var elem = document.getElementById(id);
 	elem.select();
@@ -42,7 +45,7 @@ function remove(id) {
 	number = number.replace('m', '');
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', './send.php?' + 'num=' + number + '&text=');
+	xhr.open('GET', './send.php?' + 'num=' + number + '&text=&chat=' + window.chat);
 
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState === 4 && xhr.status === 200) {
@@ -57,3 +60,30 @@ function remove(id) {
 }
 
 document.getElementById('actB').addEventListener("click", apply);
+
+function setchatVar(e) {
+	window.chat = e;
+}
+
+function UpdateChatList(dt) {
+	var rsp = document.getElementById("chatsID");
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', './chats.php');
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			if(xhr.innerHTML != xhr.responseText) {
+				rsp.innerHTML = xhr.responseText;
+				if(dt == "first"){
+					chat = rsp.childNodes[0].childNodes[0].innerHTML;
+				}
+			}
+		}
+	}
+
+	xhr.send();
+}
+
+UpdateChatList("first");
+
+setInterval(UpdateChatList, 1000);

@@ -15,7 +15,7 @@ document.forms.address.onsubmit = function(e) {
 
 		var xhr = new XMLHttpRequest();
 		if(toId != ""){
-			xhr.open('GET', './send.php?' + 'text=' + userInput + '&num=' + toId);
+			xhr.open('GET', './send.php?' + 'text=' + userInput + '&num=' + toId + '&chat=' + window.chat);
 			
 
 			xhr.onreadystatechange = function() {
@@ -29,7 +29,7 @@ document.forms.address.onsubmit = function(e) {
 
 			toId = "";
 		} else {
-			xhr.open('GET', './send.php?' + 'text=' + userInput + '&num=');
+			xhr.open('GET', './send.php?' + 'text=' + userInput + '&num=' + '&chat=' + window.chat);
 			
 
 			xhr.onreadystatechange = function() {
@@ -46,7 +46,7 @@ document.forms.address.onsubmit = function(e) {
 	} else {
 		var xhr = new XMLHttpRequest();
 		
-		xhr.open('GET', './send.php?' + 'text=&num=');
+		xhr.open('GET', './send.php?' + 'text=&num=' + '&chat=' + window.chat);
 		
 
 		xhr.onreadystatechange = function() {
@@ -69,4 +69,4 @@ function update() {
 
 update();
 
-setInterval(update, 100000);
+setInterval(update, 1000);

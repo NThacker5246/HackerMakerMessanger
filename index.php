@@ -18,7 +18,11 @@
 </head>
 <body>
 	<div class="cont">
-		<div class="col-md-3 bar"></div>
+		<div class="col-md-3 bar">
+			<div id="chatsID">
+			</div>
+			<button id="addch" type="button">Add Chat</button>
+		</div>
 		<div class="col-md-8 bar">
 			<div class="output">
 				<div id="otvet"></div>
@@ -73,6 +77,30 @@
 		</div>
 	</div>
 
+	<div id="chat" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Создание чата</h5>
+					<button type="button" class="close" data-dismiss="modal" id="cls2">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Название чата</p> <input type="text" id="chatName" name="chatName">
+					<br>
+					<button type="button" class="btn btn-info" id="chAdd">Применить</button>
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-warning"  data-dismiss="modal" id="cls3">
+						Закрыть
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<a href="./login/logout.php" class="btn btn-danger">Log Off</a>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
@@ -80,5 +108,6 @@
 	<script type="text/javascript" src="lib.js"></script>
 	<script type="text/javascript" src="send.js"></script>
 	<script type="text/javascript" src="file.js"></script>
+	<script type="text/javascript" src="chatadd.js"></script>
 </body>
 </html>
