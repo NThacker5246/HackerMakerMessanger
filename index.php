@@ -18,7 +18,12 @@
 </head>
 <body>
 	<div class="cont">
-		<div class="col-md-3 bar">
+		<div class="col-md-1">
+			<div id="servID">
+			</div>
+			<button id="addsv" type="button">Add Server</button>
+		</div>
+		<div class="col-md-2 bar">
 			<div id="chatsID">
 			</div>
 			<button id="addch" type="button">Add Chat</button>
@@ -29,12 +34,14 @@
 			</div>
 
 			<form method="GET" name="address" class="input">
-				<input type="text" name="message" class="input-field" id="inpText">
+				<input type="text" name="message" class="input-field" autocomplete="off" id="inpText">
 				<button type="submit" class="btn btn-primary">Send!</button>	
 			</form>
 
 			<form method="POST" name="fileF">
 				<input type="file" name="file">
+				<input type="hidden" name="server" id="serv1">
+				<input type="hidden" name="chat" id="chat1">
 				<button type="submit" id="filesent">Send!</button>	
 			</form>
 		</div>
@@ -75,6 +82,34 @@
 				</div>
 			</div>
 		</div>
+	</div>	
+
+	<div id="action_file" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Заголовок</h5>
+					<button type="button" class="close" data-dismiss="modal" id="cls2">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Что вы хотите сделать</p>
+				
+					<select name="act" id="act">
+						<option value="del">Удалить сообщение</option>
+					</select>
+					<br>
+					<button type="button" class="btn btn-info" id="actD">Применить</button>
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-warning"  data-dismiss="modal" id="cls3">
+						Закрыть
+					</button>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div id="chat" class="modal fade" tabindex="-1">
@@ -90,6 +125,30 @@
 					<p>Название чата</p> <input type="text" id="chatName" name="chatName">
 					<br>
 					<button type="button" class="btn btn-info" id="chAdd">Применить</button>
+				
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-warning"  data-dismiss="modal" id="cls3">
+						Закрыть
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="serva" class="modal fade" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Создание чата</h5>
+					<button type="button" class="close" data-dismiss="modal" id="cls2">
+						&times;
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>Название сервера</p> <input type="text" id="svName" name="chatName">
+					<br>
+					<button type="button" class="btn btn-info" id="svAdd">Применить</button>
 				
 				</div>
 				<div class="modal-footer">

@@ -3,6 +3,9 @@ var temp = "";
 
 var chat = "";
 var ch = "";
+var sv = "";
+
+var serv = "LocalServ";
 
 function copy(id) {
 	var elem = document.getElementById(id);
@@ -13,6 +16,11 @@ function copy(id) {
 
 function call_act(id) {
 	$("#action").modal("show");
+	temp = id;
+}
+
+function call_act_file(id) {
+	$("#action_file").modal("show");
 	temp = id;
 }
 
@@ -33,6 +41,19 @@ function apply() {
 	$("#action").modal("hide");
 }
 
+function apply_file() {
+	var act = document.getElementById('act');
+	var val = act.options[act.selectedIndex].value;
+	switch(val){
+		case "del":
+			remove(temp);
+			temp = "";
+			break;
+	}
+
+	$("#action_file").modal("hide");
+}
+
 function edit(id) {
 	console.log(document.getElementById(id));
 	var number = id;
@@ -45,7 +66,7 @@ function remove(id) {
 	number = number.replace('m', '');
 
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', './send.php?' + 'num=' + number + '&text=&chat=' + window.chat);
+	xhr.open('GET', './send.php?' + 'num=' + number + '&text=&chat=' + window.chat + '&serv=' + window.serv);
 
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState === 4 && xhr.status === 200) {
@@ -60,22 +81,47 @@ function remove(id) {
 }
 
 document.getElementById('actB').addEventListener("click", apply);
+document.getElementById('actD').addEventListener("click", apply_file);
 
 function setchatVar(e) {
 	window.chat = e;
 }
 
-function UpdateChatList(dt) {
-	var rsp = document.getElementById("chatsID");
+function servSet(e) {
+	window.serv = e;
+	UpdateChatList();
+}
+
+function UpdateServerList() {
+	var rsp = document.getElementById("servID");
 	var xhr = new XMLHttpRequest();
-	xhr.open('GET', './chats.php');
+	xhr.open('GET', './servers.php');
 
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState === 4 && xhr.status === 200) {
-			if(xhr.innerHTML != xhr.responseText) {
+			if(sv != xhr.responseText) {
 				rsp.innerHTML = xhr.responseText;
+				sv = xhr.responseText;
+			}
+		}
+	}
+
+	xhr.send();
+}
+
+function UpdateChatList(dt) {
+	UpdateServerList();
+	var rsp = document.getElementById("chatsID");
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', './chats.php?serv=' + serv);
+
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			if(ch != xhr.responseText) {
+				rsp.innerHTML = xhr.responseText;
+				ch = xhr.responseText;
 				if(dt == "first"){
-					chat = rsp.childNodes[0].childNodes[0].innerHTML;
+					window.chat = rsp.childNodes[0].childNodes[0].innerHTML;
 				}
 			}
 		}

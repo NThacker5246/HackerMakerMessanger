@@ -1,14 +1,20 @@
 var responseDiv = $('#otvet');
+var c_in = document.getElementById('chat1');
+var s_in = document.getElementById('serv1');
+
 
 document.forms.fileF.onsubmit = function(e) {
 	e.preventDefault();
+
+	c_in.value = window.chat;
+	s_in.value = window.serv;
 	
 	var userInput = document.forms.fileF.file.value;
-	var formData = new FormData(this, document.getElementById('filesent'));
+	var formData = new FormData(document.forms.fileF);
 
-	const file = userInput[0];
+	//const file = userInput[0];
 	// Добавляем файл в запрос AJAX
-	formData.append('file', file)
+	//formData.append('file', file);
 
 	var xhr = new XMLHttpRequest();
 	
