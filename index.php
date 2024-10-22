@@ -35,23 +35,36 @@
 
 			<form method="GET" name="address" class="input">
 				<input type="text" name="message" class="input-field" autocomplete="off" id="inpText">
-				<button type="submit" class="btn btn-primary">Send!</button>	
+				<button type="submit" class="btn btn-primary btn-send">Send!</button>	
 			</form>
 
 			<form method="POST" name="fileF">
 				<input type="file" name="file">
 				<input type="hidden" name="server" id="serv1">
 				<input type="hidden" name="chat" id="chat1">
+				<select name="typeMedia" id="typeMedia">
+					<option value="file">File</option>
+					<option value="img">Image</option>
+					<option value="video">Video</option>
+					<option value="audio">Audio</option>
+				</select>
 				<button type="submit" id="filesent">Send!</button>	
 			</form>
 		</div>
 		<div class="col-md-1 bar profile-bar">
-			<div>
-				<img src="/img/50x50.png">
+			<div class="row">
+				<img src="/img/50x50.png" class="profile-image">
 			</div>
-			<p>
-				<?=$_SESSION['login']?>
-			</p>
+			<div class="row">
+				<p class="text-center font">
+					<?=$_SESSION['login']?>
+				</p>
+			</div>
+			<div class="row">
+				<p class="text-center">
+					<a href="./login/logout.php" class="btn btn-danger">Log Off</a>
+				</p>
+			</div>
 		</div>
 	</div>
 
@@ -159,8 +172,6 @@
 			</div>
 		</div>
 	</div>
-
-	<a href="./login/logout.php" class="btn btn-danger">Log Off</a>
 
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
