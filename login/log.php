@@ -1,5 +1,7 @@
 <?php
 
+define('WAY', '../db/table.json');
+
 require_once '../db/db.php';
 
 $login = $_POST["login"];

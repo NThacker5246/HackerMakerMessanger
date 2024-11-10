@@ -3,6 +3,7 @@ var resp = document.getElementById('otvet');
 var input = document.getElementById('inpText');
 var otv = "";
 var flag = true;
+var fileInp = document.getElementById('file');
 
 document.forms.address.onsubmit = function(e) {
 	if(e != "update"){
@@ -12,6 +13,11 @@ document.forms.address.onsubmit = function(e) {
 
 		var userInput = document.forms.address.message.value;
 		userInput = encodeURIComponent(userInput);
+
+		if(fileInp.value != null){
+			console.log("Not null");
+			document.forms.fileF.onsubmit();
+		}
 
 		var xhr = new XMLHttpRequest();
 		if(toId != ""){

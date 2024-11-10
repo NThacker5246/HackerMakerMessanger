@@ -13,10 +13,12 @@ document.getElementById('chAdd').addEventListener("click", function(e) {
 	xhr.send();
 });
 
+/*
 document.getElementById('addch').addEventListener("click", function(e) {
 	$("#chat").modal('show');
 });
 
+*/
 
 
 
@@ -35,6 +37,10 @@ document.getElementById('svAdd').addEventListener("click", function(e) {
 	xhr.send();
 });
 
+/*
+
 document.getElementById('addsv').addEventListener("click", function(e) {
 	$("#serva").modal('show');
 });
+
+*/

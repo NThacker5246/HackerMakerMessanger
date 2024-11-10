@@ -1,0 +1,61 @@
+* {
+	font-family: "Segoe UI";
+	font-size: 30px;
+}
+
+html, body {
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+.profile-oobe {
+  width: 75%;
+  height: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+  background: rgba(62,59,81,1);
+  color: white;
+}
+
+.cont-oobe {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background: rgba(56,52,76,1);
+}
+
+.image {
+	border-radius: 100%;
+  width: 10%;
+}
+
+.inner-box {
+  background-color: green;
+  height: 25px;
+  width: 12.5px;
+  position: relative;
+  left: 0px;
+}
+
+.outer-box{
+  background: blue;
+  height: 25px;
+  width: 50px;
+  position: relative;
+  /*transition: transform 50s ease;*/
+}
+
+.active > .inner-box {
+  transform: translateX(37.5px);
+}
+
+.cb {
+  display: none;
+}

@@ -4,7 +4,7 @@ var s_in = document.getElementById('serv1');
 
 
 document.forms.fileF.onsubmit = function(e) {
-	e.preventDefault();
+	//e.preventDefault();
 
 	c_in.value = window.chat;
 	s_in.value = window.serv;

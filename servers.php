@@ -1,16 +1,19 @@
 <?php
 	$chats = scandir("./chatlog");
 
-	echo "<ul class=\"list-group\">";
+	//echo "<ul class=\"list-group\">";
 
 	for ($i=0; $i < count($chats); $i++) {
 		$name = $chats[$i];
 		if(is_dir("./chatlog/$name")){
 			if($name != "." && $name != "..") {
-				echo "<li class=\"list-group-item\" id=\"chat$i\" onclick=\"servSet('$name');\">$name</li>";
+				echo "<div class=\"v21_2\" id=\"chat$i\" onclick=\"servSet('$name');\">$name</div>";
+
 			}
 		}
 	}
 
-	echo "</ul>";
+	echo "<div id=\"addsv\" onclick=\"$('#serva').modal('show');\" class=\"v21_2\">Add Server</div>";
+
+	//echo "</ul>";
 ?>

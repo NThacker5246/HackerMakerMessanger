@@ -1,11 +1,11 @@
 var toId = "";
 var temp = "";
 
-var chat = "";
 var ch = "";
 var sv = "";
 
 var serv = "LocalServ";
+var chat = "";
 
 function copy(id) {
 	var elem = document.getElementById(id);
@@ -13,6 +13,7 @@ function copy(id) {
 	document.execCommand("copy");
 	alert("Copied!");
 }
+
 
 function call_act(id) {
 	$("#action").modal("show");
@@ -102,6 +103,8 @@ function UpdateServerList() {
 			if(sv != xhr.responseText) {
 				rsp.innerHTML = xhr.responseText;
 				sv = xhr.responseText;
+				rsp.style.width = 100*rsp.childNodes.length + "px";
+				rsp.parentNode.style.width = 100*rsp.childNodes.length + 70 + "px";
 			}
 		}
 	}
@@ -123,6 +126,7 @@ function UpdateChatList(dt) {
 				if(dt == "first"){
 					window.chat = rsp.childNodes[0].childNodes[0].innerHTML;
 				}
+				document.getElementById('chatsID').childNodes[0].onclick();
 			}
 		}
 	}
@@ -133,3 +137,13 @@ function UpdateChatList(dt) {
 UpdateChatList("first");
 
 setInterval(UpdateChatList, 1000);
+
+const closes = document.getElementsByClassName('close');
+
+for (var i = 0; i < closes.length; i++) {
+	closes[i].onclick = function(e) {
+		$("#serva").modal("hide");		
+		$("#chat").modal("hide");	
+		$("#action").modal("hide");
+	}
+}
