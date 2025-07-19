@@ -1,0 +1,56 @@
+class Bit {
+  public $byte;
+
+  function __construct($byte) {
+    $this->byte = $byte;
+  }
+
+  function band($other) {
+    $length = strlen($this->byte);
+    $string = "";
+    for ($i = 0; $i < $length; $i++) {
+      if ($this->byte[$i] == "1" && $other->byte[$i] == "1") {
+        $string .= "1";
+      } else {
+        $string .= "0";
+      }
+    }
+    $this->byte = $string;
+  }
+
+  function bor($other) {
+    $length = strlen($this->byte);
+    $string = "";
+    for ($i = 0; $i < $length; $i++) {
+      if ($this->byte[$i] == "0" && $other->byte[$i] == "0") {
+        $string .= "0";
+      } else {
+        $string .= "1";
+      }
+    }
+    $this->byte = $string;
+  }
+
+  // ...
+}
+
+$text = "Lets encrypt Hello world ban schiglovligenda kawasaki";
+$binary = implode(' ', array_map(function($x) {
+  return str_pad(decbin(ord($x)), 8, "0", STR_PAD_LEFT);
+}, str_split($text)));
+
+$array = explode(' ', $binary);
+$byter = [];
+
+function get8bit(&$array, &$done) {
+  foreach ($array as $item) {
+    if (strlen($item) < 8) {
+      $item = str_pad($item, 8, "0", STR_PAD_LEFT);
+    }
+    $done[] = $item;
+  }
+}
+
+get8bit($array, $byter);
+
+// ... (continues)
