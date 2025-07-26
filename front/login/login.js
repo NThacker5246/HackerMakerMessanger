@@ -13,12 +13,13 @@ btn.addEventListener("click", function(e) {
 		//var A = (G ** rand()) % P;
 		//var xhr = new XMLHttpRequest();
 		//xhr.open("GET", "callback?generateB";
-		var d = new Date();
-		d.setTime(Date.now() + 5000000);
-		setcookie("User", nick.value, d);
-		//location.href = "../index.html";
+		document.cookie = "User=" + nick.value + "; max_age=5000; path=/;"
+		console.log("test"); 
+		location.href = "../index.html";
 	}
 });
+/*
 function setcookie(name, data, date){
-	document.cookie += name + "=" + data + ";" + "expires=" + date.toUTCString(); 
+	document.cookie = name + "=" + data + ";" + "max_age=" + date + "path=/;"; 
 }
+*/
