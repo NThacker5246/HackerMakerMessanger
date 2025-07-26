@@ -11,10 +11,9 @@
 		<pre>Т.к заблокировали Discord, мы решили сделать свою, лучшую альтернативу Discord, которая ещё и имеет открытый исходный код. Пользуйтесь</pre>
 		<p>Как в старые-добрые, отправить</p>
 	-->
-
 	<br>
+
 	
-	<!--<div id="textOutput">Upload a text file please</div>-->  
 
 	<div class="cont">
 		<div class="desktop">
@@ -24,6 +23,7 @@
 				</div>
 			</div>
 			<div class="right-panel">
+				<div id="textOutput">Upload a text file please</div>  
 				
 			</div>
 			<div class="left-panel">
@@ -85,7 +85,13 @@
 				</div>
 			</div>
 			<div class="v8_3">
-				<input type="file" id="file"> 
+				<label for="file" class="file-button">Attach File</label><input type="file" id="file">
+				<select class="sel-file" id="fileType">
+					<option value="down">As download link</option>
+					<option value="pict">As picture</option>
+					<option value="vide">As videoplayer</option>
+					<option value="musc">As musicplayer</option>
+				</select>
 				<button id="fsend" type="button" class="v8_4">Send file</button>
 				<input type="text" name="text" id="messa" class="input-panel" placeholder="Enter a message">
 				<button id="tsend" type="button" class="button">Send text</button>

@@ -12,7 +12,15 @@ using System.Text;
 
 int port = 80;
 
-const int maxBufferSize = 64 * 1024;
+const int maxBufferSize = 5 * 1024 * 1024;
+
+
+const int G = 831;
+const int P = 465;
+
+const int A = 35195;
+const int C = 95315410;
+int x = 1;
 
 TcpListener server = new TcpListener(IPAddress.Any, port);
 server.Start();
@@ -40,7 +48,7 @@ while(true){
 		byte[] buffer = new byte[maxBufferSize];
 		int bytesRead = st.Read(buffer, 0, buffer.Length);
 				
-		string message = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+		string message = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 		int end = 0;
 		bool parse = false;
 		for(int i = 5; end == 0; ++i){
@@ -57,6 +65,7 @@ while(true){
 		byte[] result;
 		
 		if(!parse){
+			way = DecodeUrlString(way);
 			try {
 				result = File.ReadAllBytes("front/"+way);
 
@@ -69,7 +78,7 @@ while(true){
 				if(ext.ContainsKey(est)){
 					exte = (string) ext[est];
 				}
-				byte[] rt = Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: {exte}\r\nContent-Length: {result.Length}\r\nAccept-Ranges: bytes\r\n\r\n");
+				byte[] rt = Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: {exte}\r\nContent-Length: {result.Length}\r\nAccept-Ranges: bytes\r\n\r\n");
 				byte[] tow = new byte[rt.Length + result.Length];
 				for(int i = 0; i < rt.Length; ++i){
 					tow[i] = rt[i];
@@ -80,7 +89,7 @@ while(true){
 		
 				st.Write(tow);
 			} catch (Exception e) {
-				st.Write(Encoding.ASCII.GetBytes($"HTTP/1.1 404 Not Found\r\n" + e.ToString()));
+				st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 404 Not Found\r\n" + e.ToString()));
 				continue;
 			}
 			
@@ -89,6 +98,7 @@ while(true){
 			string filename = ""; //NOTE: fname key must be parsed early than data
 			string chatName = ""; //NOTE: chatName must be parsed early than sent/readall key
 			string serverName = ""; //NOTE: serverName must be parsed early than chat key
+			string ftype = "";
 			//parsing
 			for(int i = 0; i < params1.Length; ++i){
 				string[] kW = params1[i].Split('=');
@@ -97,33 +107,89 @@ while(true){
 				switch(kW[0]){
 					case "sent":
 						if(chatName == "") break;
-						string answer = Encoding.ASCII.GetString(File.ReadAllBytes($"text/{serverName}/{chatName}")) + kW[1];
-						byte[] deparse = Encoding.ASCII.GetBytes(answer);
+						string answer = Encoding.UTF8.GetString(File.ReadAllBytes($"text/{serverName}/{chatName}")) + kW[1];
+						byte[] deparse = Encoding.UTF8.GetBytes(answer);
 						File.WriteAllBytes($"text/{serverName}/{chatName}", deparse);
-						st.Write(Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {deparse.Length}\r\nAccept-Ranges: bytes\r\n\r\n{answer}"));
+						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {deparse.Length}\r\nAccept-Ranges: bytes\r\n\r\n{answer}"));
 						break;
 
 					case "fname":
 						filename = kW[1];
+						Console.Write($"Parsed file: {kW[1]}");
 						break;
 
 					case "data":
+						Console.Write(filename);
+					    string filePath = "front/files/" + DecodeUrlString(filename);
+					    
+					    // Проверяем, base64 ли это (бинарный файл)
+					    bool isBase64 = false;
+					    foreach (var param in params1) {
+					        if (param.StartsWith("isBase64=")) {
+					            isBase64 = param.Substring(9) == "1";
+					            break;
+					        }
+					    }
+					    
+					    if (isBase64) {
+					        // Декодируем base64 в бинарные данные
+					        string realBase = kW[1].Trim().Replace(" ", "+").Replace("\n", "");
+					        //for(int j = 0; j < kW.Length - 2; ++j) realBase += "=";
+					        Console.Write(realBase);
+					        byte[] fileData = base64_decode(kW[1]);
+					        File.WriteAllBytes(filePath, fileData);
+					    } else {
+					        // Текстовые данные пишем как есть
+					        File.WriteAllText(filePath, DecodeUrlString(kW[1]), Encoding.UTF8);
+					    }
+					    
+					    // Обновляем чат
+					    string answer1 = Encoding.UTF8.GetString(File.ReadAllBytes($"text/{serverName}/{chatName}"));
+					    
+					    switch(ftype){
+							case "down":
+								answer1 += $"<br><a href=\"files/{filename}\" download=\"\">{filename}</a>";
+								break;
+							case "pict":
+								answer1 += $"<br><img src=\"files/{filename}\">";
+								break;
+							case "vide":
+								answer1 += $"<br><video href=\"files/{filename}\" controls=\"\">";
+								break;
+							case "musc":
+								answer1 += $"<br><audio href=\"files/{filename}\" controls=\"\">";
+								break;
+
+						}
+					    
+					    File.WriteAllBytes($"text/{serverName}/{chatName}", Encoding.UTF8.GetBytes(answer1));
+					    st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {answer1.Length}\r\nAccept-Ranges: bytes\r\n\r\n{answer1}"));
+					    break;
+
+					/*case "data":
 						if(chatName == "") break;
 						FileStream file = File.Create("front/files/" + filename);
 						file.Close();
-						File.WriteAllBytes("front/files/" + filename, Encoding.ASCII.GetBytes(DecodeUrlString(kW[1])));
-						string answer1 = Encoding.ASCII.GetString(File.ReadAllBytes($"text/{serverName}/{chatName}")) + $"<br><a href=\"files/{filename}\" download=\"\">{filename}</a>";
-						byte[] deparse1 = Encoding.ASCII.GetBytes(answer1);
+						File.WriteAllBytes("front/files/" + DecodeUrlString(filename), /*Encoding.UTF8.GetBytes(base64_decode(kW[1])));
+						string answer1 = Encoding.UTF8.GetString(File.ReadAllBytes($"text/{serverName}/{chatName}"));
+						Console.Write(ftype);
+						
+						byte[] deparse1 = Encoding.UTF8.GetBytes(answer1);
 						File.WriteAllBytes($"text/{serverName}/{chatName}", deparse1);
-						st.Write(Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {deparse1.Length}\r\nAccept-Ranges: bytes\r\n\r\n{answer1}"));
+						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {deparse1.Length}\r\nAccept-Ranges: bytes\r\n\r\n{answer1}"));
+						break;
+					*/
+
+					case "type":
+						ftype = kW[1];
 						break;
 
 					case "readall":
 						if(chatName == "") break;
 						byte[] bt = File.ReadAllBytes($"text/{serverName}/{chatName}");
-						string rd = Encoding.ASCII.GetString(bt);
+						string rd = Encoding.UTF8.GetString(bt);
 						Console.Write($"\n{rd}");
-						st.Write(Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {bt.Length}\r\nAccept-Ranges: bytes\r\n\r\n{rd}"));
+						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {bt.Length}\r\nAccept-Ranges: bytes\r\n\r\n{rd}"));
 						break;
 
 					case "newchat":
@@ -131,7 +197,7 @@ while(true){
 						//Directory.CreateDirectory(directory + "\\" + par[1]);
 						FileStream file2 = File.Create($"text/{serverName}" + kW[1]);
 						file2.Close();
-						File.WriteAllBytes($"text/{serverName}/" + kW[1], Encoding.ASCII.GetBytes("-------------------System: Dialog started-------------------"));
+						File.WriteAllBytes($"text/{serverName}/" + kW[1], Encoding.UTF8.GetBytes("-------------------System: Dialog started-------------------"));
 						break;
 
 					case "chat":
@@ -146,12 +212,12 @@ while(true){
 							//buff += "\n" + file;
 							buff += "<div class=\"v23_29 chat\">" + fileS.Substring(6 + serverName.Length) + "</div>";
 						}
-						st.Write(Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {buff.Length}\r\nAccept-Ranges: bytes\r\n\r\n{buff}"));
+						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {buff.Length}\r\nAccept-Ranges: bytes\r\n\r\n{buff}"));
 						break;
 
 					case "newserver":
 						Directory.CreateDirectory("text/" + DecodeUrlString(kW[1]));
-						st.Write(Encoding.ASCII.GetBytes("HTTP/1.1 200 OK"));
+						st.Write(Encoding.UTF8.GetBytes("HTTP/1.1 200 OK"));
 						break;
 
 					case "server":
@@ -165,7 +231,13 @@ while(true){
 							buffia += "<div class=\"v21_2 serv\">" + fileS.Substring(5) + "</div>";
 							Console.Write(fileS);
 						}
-						st.Write(Encoding.ASCII.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {buffia.Length}\r\nAccept-Ranges: bytes\r\n\r\n{buffia}"));
+						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {buffia.Length}\r\nAccept-Ranges: bytes\r\n\r\n{buffia}"));
+						break;
+
+					case "generateB":
+						int x2 = LCM();
+						int B = fastPow(G, x2) % P;
+						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 4\r\nAccept-Ranges: bytes\r\n\r\n{B}"));
 						break;
 
 				}
@@ -190,4 +262,72 @@ string DecodeUrlString(string url) {
     while ((newUrl = Uri.UnescapeDataString(url)) != url)
         url = newUrl;
     return newUrl;
+}
+
+int LCM(){
+	x = x * A + C;
+	return (x & 16) & 5;
+}
+
+int fastPow(int a, int b){
+	return 0;
+}
+
+/*
+byte[] base64_decode(string into){
+	byte[] outto = new byte[(int) Math.Ceiling((double) (into.Length / 4 * 3))];
+	const string ou = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	int push = 0;
+	int io = 0;
+	for(int i = 0; i < into.Length; ++i){
+		for(int j = 0; i < 64; ++j){
+			if(ou[j] == into[i]){
+				push |= j << ((~i & 3) * 6);
+				if((i & 3) == 3){
+					outto[io] = (byte) (push & 255);
+					outto[io + 1] = (byte) ((push >> 8) & 255);
+					outto[io + 2] = (byte) (push >> 16);
+					io += 3;
+					push = 0;
+				}
+				break;
+			}
+		}
+	}
+	return outto;
+}
+*/
+byte[] base64_decode(string input) {
+    // The base character set
+    int max_padding = input.Length % 4;
+    for(int i = 0; i < max_padding; ++i) input += "=";
+    const string BASE64_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    // The length of the input
+    int input_length = input.Length;
+
+    // The output
+    int t = 0;
+    byte[] output = new byte[(int) Math.Ceiling((double) input.Length / 4 * 3)];
+ 
+    // Process the input in 4-character blocks
+    for(int i = 0; i < input_length; i += 4) {
+        // The value of the block
+        int block_value = (BASE64_CHARS.IndexOf(input[i]) << 18) + (BASE64_CHARS.IndexOf(input[i+1]) << 12) + (BASE64_CHARS.IndexOf(input[i+2]) << 6 ) + BASE64_CHARS.IndexOf(input[i + 3]);
+ 
+        // Decode the block into 3 bytes
+        for(int j = 0; j < 3; ++j){
+            byte k = (byte) ((block_value >> ((2 - j) * 8)) & 0xFF);
+            output[t] = k;
+            t++;
+        }
+    }
+ 
+    // Remove any padding bytes from the output
+    int padding = input.Split('=').Length - 1;
+    byte[] ou = new byte[output.Length - padding];
+    for(int i = 0; i < output.Length - padding; ++i){
+    	ou[i] = output[i];
+    }
+ 
+    return ou;
 }

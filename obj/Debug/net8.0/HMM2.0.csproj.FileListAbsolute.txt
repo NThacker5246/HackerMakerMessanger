@@ -12,3 +12,4 @@ C:\Users\nicol\Desktop\HMM2.0\obj\Debug\net8.0\refint\HMM2.0.dll
 C:\Users\nicol\Desktop\HMM2.0\obj\Debug\net8.0\HMM2.0.pdb
 C:\Users\nicol\Desktop\HMM2.0\obj\Debug\net8.0\HMM2.0.genruntimeconfig.cache
 C:\Users\nicol\Desktop\HMM2.0\obj\Debug\net8.0\ref\HMM2.0.dll
+C:\Users\nicol\Desktop\HMM2.0\obj\Debug\net8.0\HMM2.0.sourcelink.json
