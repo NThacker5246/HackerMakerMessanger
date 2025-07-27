@@ -1,3 +1,7 @@
+* {
+	font-family: "Segoe UI";
+}
+
 html, body {
 	width: 100%;
 	height: 100%;
@@ -20,7 +24,7 @@ body {
 	flex-wrap: wrap;
 }
 
-#nick, #pass, #btn {
+#nick, #pass, #btn, #resp {
 	font-size: 30px;
 	padding: 7px;
 	border-radius: 7px;
@@ -30,5 +34,9 @@ body {
 #btn:hover {
 	cursor: pointer;
 	background-color: gray;
+	color: white;
+}
+
+#resp {
 	color: white;
 }

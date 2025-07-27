@@ -1,6 +1,8 @@
 const btn = document.getElementById('btn');
 const nick = document.getElementById('nick');
 const pass = document.getElementById('pass');
+
+const resp = document.getElementById('resp');
 		
 //GPA
 const G = 831;
@@ -11,15 +13,28 @@ btn.addEventListener("click", function(e) {
 		//login
 		//generate key
 		//var A = (G ** rand()) % P;
-		//var xhr = new XMLHttpRequest();
-		//xhr.open("GET", "callback?generateB";
-		document.cookie = "User=" + nick.value + "; max_age=5000; path=/;"
-		console.log("test"); 
-		location.href = "../index.html";
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "callback?dosstub=t&login=" + nick.value + "&pass=" + pass.value);
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4 && xhr.status == 200){
+				switch(xhr.responseText){
+					case "Login succeeful":
+						document.cookie = "User=" + nick.value + "; max_age=5000; path=/;"
+						console.log("Just a moment"); 
+						location.href = "../index.html";
+						break;
+					case "User not found":
+						resp.innerHTML = "User with name " + nick.value + " not found. Would you like register <a href=\"../register/index.html\">now</a>?";
+						break;
+					case "Password incorrect":
+						resp.innerHTML = "Password incorrect, try again or escalate your privilegies :), if you can.";
+						break;
+				}
+			}
+		}
+		xhr.send();
+	} else {
+		resp.innerHTML = "Write all lines)";
 	}
 });
-/*
-function setcookie(name, data, date){
-	document.cookie = name + "=" + data + ";" + "max_age=" + date + "path=/;"; 
-}
-*/
+

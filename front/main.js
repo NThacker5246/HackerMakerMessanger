@@ -1,3 +1,5 @@
+if(document.cookie == "") location.href = "/login/index.html";
+
 //InputOutput system
 const input = document.getElementById('messa');
 const output = document.getElementById('resp');

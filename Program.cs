@@ -99,10 +99,13 @@ while(true){
 			string chatName = ""; //NOTE: chatName must be parsed early than sent/readall key
 			string serverName = ""; //NOTE: serverName must be parsed early than chat key
 			string ftype = "";
+			//login-help
+			string login = ""; //NOTE: login key must be pasrsed early pass key
+			bool register = false; //NOTE: register key must be parsed early passkey, if key was undefined - system just tries to login up
 			//parsing
 			for(int i = 0; i < params1.Length; ++i){
 				string[] kW = params1[i].Split('=');
-				//Console.Write(kW[i]);
+				Console.Write(kW[0]);
 				//switching keys
 				switch(kW[0]){
 					case "sent":
@@ -238,6 +241,47 @@ while(true){
 						int x2 = LCM();
 						int B = fastPow(G, x2) % P;
 						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 4\r\nAccept-Ranges: bytes\r\n\r\n{B}"));
+						break;
+					
+					case "register":
+						register = true;
+						Console.WriteLine("Volatile register");
+						break;
+
+					case "login":
+						login = kW[1];
+						break;
+					case "pass":
+						foreach (var param in params1) {
+					        if (param.StartsWith("register=")) {
+					            register = true;
+					        }
+					        Console.WriteLine("HereLine");
+					    }
+
+						Console.WriteLine(login);
+						Console.WriteLine(register);
+						if(register){
+							if(!File.Exists($"usr/{login}.conf")){
+								FileStream fileME = File.Create($"usr/{login}.conf");
+								fileME.Close();
+								File.WriteAllBytes($"usr/{login}.conf", Encoding.UTF8.GetBytes($"{AlekOSHash(kW[1])}"));
+								st.Write(Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\nAccept-Ranges: bytes\r\n\r\nLogin"));
+							} else {
+								st.Write(Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\nAccept-Ranges: bytes\r\n\r\nExist"));
+							}
+						} else {
+							if(File.Exists($"usr/{login}.conf")){
+								string userpass = Encoding.UTF8.GetString(File.ReadAllBytes($"usr/{login}.conf"));
+								if(userpass == $"{AlekOSHash(kW[1])}"){ //unencrypted check
+									st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 15\r\nAccept-Ranges: bytes\r\n\r\nLogin succeeful"));
+								} else {
+									st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 18\r\nAccept-Ranges: bytes\r\n\r\nPassword incorrect"));
+								}
+							} else {
+								st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 14\r\nAccept-Ranges: bytes\r\n\r\nUser not found"));
+							}
+						}
 						break;
 
 				}
