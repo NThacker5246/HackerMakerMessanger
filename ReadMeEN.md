@@ -1,7 +1,5 @@
 <h1>HackerMakerMessenger</h1>
 
-English version: <a href="ReadMeEN.md">ReadMeEN.md</a>
-
 This is a self-written messenger, originally written in PHP, but then rewritten in C#. It was created as an alternative to Discord, blocked in Russia, but now it is being created as an alternative to everything else, with open source code, the ability to change, adapt and improve.
 
 Installing a copy (for yourself and writing code)
