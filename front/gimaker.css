@@ -3,6 +3,7 @@
 	margin: 0px !important;
 	font-family: "Segoe UI";
 	scrollbar-color: rgba(82,115,199,1) #eeeeee00;
+	color: #FFFFFF !important;
 }
 body {
 	font-size: 14px;
@@ -67,12 +68,12 @@ body {
 }
 .v1_7 {
 	width: 450px;
-	height: 190px;
+	height: 220px;
 	background: rgba(42,40,58,1);
 	padding: 5px 10px;
 	margin: 10px;
 	opacity: 1;
-	position: relative;
+	position: static;
 	top: 0px;
 	left: 0px;
 	overflow: hidden;
@@ -122,12 +123,12 @@ body {
 	overflow: hidden;
 	margin-right: 10px !important; 
 	display: inline-block;
+	padding: 3px;
 }
 
 .v22_17 {
 	width: 430px;
-	height: 60px;
-	background: url("../images/v22_17.png");
+	height: 85px;
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: cover;
@@ -136,14 +137,16 @@ body {
 	position: absolute;
 	top: 130px;
 	left: 10px;
-	overflow: hidden;
+	overflow-y: hidden;
+	display: flex;
+	overflow-x: scroll;
 }
 .v22_18 {
 	width: 60px;
 	height: 60px;
 	background: rgba(68,72,94,1);
 	opacity: 1;
-	position: relative;
+	position: static;
 	top: 0px;
 	left: 0px;
 	border-top-left-radius: 30px;
@@ -151,6 +154,7 @@ body {
 	border-bottom-left-radius: 30px;
 	border-bottom-right-radius: 30px;
 	overflow: hidden;
+	margin-right: 10px !important;
 }
 .v22_19 {
 	width: 60px;
@@ -624,7 +628,7 @@ body {
 #out-chat {
 	position: relative;
 	top: 10px;
-	height: 600px;
+	height: 590px;
 	overflow-y: scroll;
 	overflow-x: hidden;
 }

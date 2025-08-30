@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru-RU">
+<head>
+	<meta charset="utf-8">
+	<title>Account</title>
+	<style>
+		* {
+			color: white;
+		}
+		textarea {
+			font-size: 20px;
+			width: 100%;
+			height: 100px;
+		}
+		input {
+			font-size: 20px;
+			width: 100%;
+			color: black;
+		}
+		#ava {
+			display: none;
+		}
+
+		label {
+			background: green;
+			border: 3px solid black;
+			padding: 4px;
+			border-radius: 10px;
+			margin-top: 10px;
+			font-size: 20px;
+		}
+
+		label:hover {
+			background: red;
+			cursor: pointer;
+			
+		}
+
+		button {
+			background: magenta;			
+			font-size: 20px;
+			padding: 2px;
+			border-radius: 4px;
+		}
+
+		button:hover {
+			cursor: pointer;
+			background: blue;
+		}
+	</style>
+	<link rel="stylesheet" type="text/css" href="loginregister.css">
+</head>
+<body>
+	<div class="center">
+		<h1 id="subname">Привет, </h1>
+		<h2>Здесь можно поменять иконку, личную информацию и пароль</h2>
+		<textarea placeholder="Представьте информацию для деанона, серию-номер паспорта, номер карточки и три цифры сзади"></textarea>
+		<input type="password" placeholder="Обновить пароль (если пусто то ничего не будет)">
+		<label for="ava">Заставка. Внимание! 128x128 (можно больше, но 1 к 1), PNG/GIF/JPEG</label>
+		<input type="file" name="ava" id="ava">
+		<button id="submit">Сохранить</button>
+
+	</div>
+	<script type="text/javascript">
+		const name = document.getElementById('subname');
+		name.innerHTML += getcookie("User");
+
+		function getcookie(param){
+			var da = document.cookie.split("&");
+			for (var i = 0; i < da.length; i++) {
+				var kW = da[i].split("; ")[0].split("=");
+				if(kW[0] == param) return kW[1];
+			}
+		}
+	</script>
+</body>
+</html>

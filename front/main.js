@@ -18,6 +18,8 @@ const ns = document.getElementById('ns');
 
 const sel = document.getElementById('fileType');
 
+const userlists = document.getElementById('users');
+
 var chat = "";
 var server = "LocalServ";
 
@@ -187,3 +189,24 @@ function base64_encode(buffer) {
 	}
 	return result;
 }
+
+function userlist() {
+	var xhr = new XMLHttpRequest(); 
+	xhr.open("GET", "callback?dosstub=1&userlist=ts"); 
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200){
+			var array = xhr.responseText.substring(0, xhr.responseText.length-1).split(",");
+			for (var i = 0; i < array.length; i++) {
+				 	console.log(array[i]);
+			 	array[i] = array[i].substring(6, array[i].length-5);
+			 	userlists.innerHTML += "<div class=\"v22_18\">" + array[i] + "</div>";
+			 	console.log(array[i]);
+			}
+			delete array; 
+			delete xhr;
+		}
+	};
+	xhr.send();
+}
+
+userlist();

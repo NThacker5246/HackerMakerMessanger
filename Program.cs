@@ -284,6 +284,16 @@ while(true){
 						}
 						break;
 
+					case "userlist":
+						string[] iret = Directory.GetFiles("./usr", "*", SearchOption.AllDirectories);
+						string ucat = "";
+						for(int p = 0; p < iret.Length; ++p) ucat += $"{iret[p]},";
+						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {ucat.Length}\r\nAccept-Ranges: bytes\r\n\r\n{ucat}"));
+						break;
+
+					case "deanon":
+						break;
+
 				}
 			}
 		}
