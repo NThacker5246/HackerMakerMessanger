@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 using System.Globalization;
 using System.Text;
+using System.Text.Json;
 
 int port = 80;
 
@@ -21,6 +22,15 @@ const int P = 465;
 const int A = 35195;
 const int C = 95315410;
 int x = 1;
+
+bool littleEndian = false;
+int n = 1;
+unsafe {
+	if(*(char *)&n == 1) {
+		littleEndian = true;
+	}
+}
+
 
 TcpListener server = new TcpListener(IPAddress.Any, port);
 server.Start();
@@ -259,25 +269,66 @@ while(true){
 					        Console.WriteLine("HereLine");
 					    }
 
-						Console.WriteLine(login);
-						Console.WriteLine(register);
+						//Console.WriteLine(login);
+						//Console.WriteLine(register);
 						if(register){
 							if(!File.Exists($"usr/{login}.conf")){
 								FileStream fileME = File.Create($"usr/{login}.conf");
 								fileME.Close();
-								File.WriteAllBytes($"usr/{login}.conf", Encoding.UTF8.GetBytes($"{AlekOSHash(kW[1])}"));
+								Data myData;
+								myData.pwd = AlekOSHash(kW[1]);
+								int len = 0;
+								unsafe {
+									len = sizeof(Data);
+								}
+								byte[] toW = new byte[len];
+								unsafe {
+									Data *ptr = &myData;
+									byte *ptrt = (byte*) ptr;
+									if(littleEndian){
+										for(int p = toW.Length-1; p >= 0; --p) {toW[p] = *(ptrt + p); Console.WriteLine(*(ptrt + p));}
+									} else {
+										for(int p = 0; p < toW.Length; ++p) {toW[p] = *(ptrt + p); Console.WriteLine(*(ptrt + p));}
+									}
+								}
+
+
+
+								File.WriteAllBytes($"usr/{login}.conf", toW);
 								st.Write(Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\nAccept-Ranges: bytes\r\n\r\nLogin"));
 							} else {
 								st.Write(Encoding.UTF8.GetBytes("HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 5\r\nAccept-Ranges: bytes\r\n\r\nExist"));
 							}
 						} else {
 							if(File.Exists($"usr/{login}.conf")){
-								string userpass = Encoding.UTF8.GetString(File.ReadAllBytes($"usr/{login}.conf"));
-								if(userpass == $"{AlekOSHash(kW[1])}"){ //unencrypted check
+								//string userpass = Encoding.UTF8.GetString(File.ReadAllBytes($"usr/{login}.conf"));
+								byte[] data = File.ReadAllBytes($"usr/{login}.conf");
+								Data myData;
+								Console.WriteLine(data[3]);
+								unsafe {
+									byte* ptr = stackalloc byte[sizeof(Data)];
+									if(littleEndian){
+										for(int p = data.Length - 1; p >= 0; --p) *(ptr + p) = data[p];
+										} else {
+											for(int p = 0; p < data.Length; ++p) *(ptr + p) = data[p];
+										}
+									
+									myData = *((Data*) ptr);
+								}
+
+								if(myData.pwd == AlekOSHash(kW[1])){ //unencrypted check
 									st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 15\r\nAccept-Ranges: bytes\r\n\r\nLogin succeeful"));
 								} else {
 									st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 18\r\nAccept-Ranges: bytes\r\n\r\nPassword incorrect"));
 								}
+								Console.WriteLine(myData.pwd);
+								/*
+								if(myData.pwd == AlekOSHash(kW[1])){ //unencrypted check
+									st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 15\r\nAccept-Ranges: bytes\r\n\r\nLogin succeeful"));
+								} else {
+									st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 18\r\nAccept-Ranges: bytes\r\n\r\nPassword incorrect"));
+								}
+								*/
 							} else {
 								st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 14\r\nAccept-Ranges: bytes\r\n\r\nUser not found"));
 							}
@@ -292,6 +343,20 @@ while(true){
 						break;
 
 					case "deanon":
+						byte[] andata = File.ReadAllBytes($"./usr/{login}.conf");
+						Data deanoned;
+						unsafe {
+							byte* iptr = stackalloc byte[sizeof(Data)];
+							if(littleEndian){
+								for(int p = andata.Length - 1; p >= 0; --p) *(iptr + p) = andata[p];
+								} else {
+									for(int p = 0; p < andata.Length; ++p) *(iptr + p) = andata[p];
+								}
+							
+							deanoned = *((Data*) iptr);
+						}
+						string ms = $"{deanoned.pwd}";
+						st.Write(Encoding.UTF8.GetBytes($"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {ms.Length}\r\nAccept-Ranges: bytes\r\n\r\n" + ms));
 						break;
 
 				}
@@ -384,4 +449,8 @@ byte[] base64_decode(string input) {
     }
  
     return ou;
+}
+
+struct Data {
+	public int pwd; //hash
 }

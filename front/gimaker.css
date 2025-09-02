@@ -632,3 +632,25 @@ body {
 	overflow-y: scroll;
 	overflow-x: hidden;
 }
+
+.deanon-win{
+	position: absolute;
+	width: 200px;
+	height: 100px;
+	background-color: rgba(62, 59, 81, 1);
+	border-radius: 20px;
+	top: calc(50% - 50px);
+	left: calc(50% - 100px);
+	padding: 10px;
+}
+
+.hidden {
+	display: none;
+}
+
+.deanon-win > button {
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	background: black;
+}

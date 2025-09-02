@@ -20,6 +20,9 @@ const sel = document.getElementById('fileType');
 
 const userlists = document.getElementById('users');
 
+const deanon = document.getElementById('deanon');
+const dpwd = document.getElementById('dpwd');
+
 var chat = "";
 var server = "LocalServ";
 
@@ -190,6 +193,21 @@ function base64_encode(buffer) {
 	return result;
 }
 
+function loaddeanon(name) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "callback?dosstub=1&login=" + name + "&deanon=1");
+
+	xhr.onreadystatechange = function() {
+		if(xhr.readyState == 4 && xhr.status == 200){
+			var data = xhr.responseText.trim().split(",");
+			deanon.classList.toggle("hidden");
+			dpwd.innerHTML = data[0];
+		}
+	}
+
+	xhr.send();
+}
+
 function userlist() {
 	var xhr = new XMLHttpRequest(); 
 	xhr.open("GET", "callback?dosstub=1&userlist=ts"); 
@@ -197,9 +215,9 @@ function userlist() {
 		if(xhr.readyState == 4 && xhr.status == 200){
 			var array = xhr.responseText.substring(0, xhr.responseText.length-1).split(",");
 			for (var i = 0; i < array.length; i++) {
-				 	console.log(array[i]);
+			 	console.log(array[i]);
 			 	array[i] = array[i].substring(6, array[i].length-5);
-			 	userlists.innerHTML += "<div class=\"v22_18\">" + array[i] + "</div>";
+			 	userlists.innerHTML += "<div class=\"v22_18\" onclick=\"loaddeanon(\'" + array[i] + "\')\">" + array[i] + "</div>";
 			 	console.log(array[i]);
 			}
 			delete array; 
@@ -210,3 +228,4 @@ function userlist() {
 }
 
 userlist();
+
