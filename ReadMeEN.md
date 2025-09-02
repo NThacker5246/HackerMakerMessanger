@@ -1,10 +1,18 @@
 <h1>HackerMakerMessenger</h1>
 
-This is a self-written messenger, originally written in PHP, but then rewritten in C#. It was created as an alternative to Discord, blocked in Russia, but now it is being created as an alternative to everything else, with open source code, the ability to change, adapt and improve.
+A messenger written in PHP, later reworked in C#. It was created as an FOS alternative to Discord that opens creative freedom for modifications etc.
 
-Installing a copy (for yourself and writing code)
-You need to have git and dotnet 8.0 (probably older is possible, I don't know)
-Installation - on the Microsoft website for Windows or Debian (yes, it will run on Linux)
+## Installing a copy
+
+Requirements:
+Git (latest version recommended)
+.NET 8.0
+
+
+https://git-scm.com/downloads
+https://dotnet.microsoft.com/en-us/download/dotnet/8.0
+
+You can use Terminal in order to install .NET on Linux distributives. We provide example for Debian/Ubuntu systems below:
 
 ```bash
 wget https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -14,7 +22,8 @@ rm packages-microsoft-prod.deb
 sudo apt-get update && \
 sudo apt-get install -y dotnet-sdk-8.0
 ```
-Installation and launch
+
+Download Messenger and startup
 
 ```bat
 git clone https://github.com/NThacker5246/HackerMakerMessanger.git
@@ -22,18 +31,21 @@ cd ./HackerMakerMessenger
 dotnet run
 ```
 
-For Linux dotnet run is needed with sudo, for Windows even administrator rights are not needed.
+Please acknowledge that you will require administrative privileges in order to run .NET
 
-Then you can open launch.bat to run. (Win)
+You can use launch.bat on windows systems for easier start
+
 <hr>
-<h2>How to participate in development?</h2>
-1. If you have a question/suggestion/found a bug - write in Issue (check if there are similar Issues, if there are and it didn't help, then write, if not, then also write)
+<h2>Participation</h2>
+1. If you have a question/suggestion/found a bug - write in Issue (check if there aren't similar issues)
 Steps: https://github.com/NThacker5246/HackerMakerMessanger/issues and click New Issue
-Title - describe the question/bug/suggestion as accurately as possible in 2-4 words
+Title - describe the question/bug/suggestion as precise as possible in 2-4 words
+
+
 Bug Issue template
 
 ```
-I found a bug/error in the application, <name as in the Issue title>, and I want to report it
+I found a bug/error in the application, <name as in the Issue title>
 1. Current behavior
 When <describe the exact algorithm of actions to reproduce>, <action> occurs
 2. Expected behavior
@@ -49,7 +61,7 @@ For a question/problem/suggestion
 
 ```
 I have a question/problem/suggestion <question as in the title>
-1. Description of the question/problem/suggestion (with the latter, describe exactly what you want)
+1. Description of the question/problem/suggestion
 2. Branch for implementing the proposal (if you are not a developer, the developers themselves will attach the branch
-3. How you want it to be (additional wishes)
+3. Additional suggestions
 ```
